@@ -29,6 +29,17 @@ final class FirstViewModel {
 
 extension FirstViewModel {
 //    TODO
-//    func transform (input : Input) -> Output {
-//    }
+    func transform (input : Input) -> Output {
+        let selectedItem = input.buttonClicked.map { buttonNumber in
+            ButtonModel(buttonNumber: buttonNumber,
+                        buttonInfo: buttonNumber.description)
+        }
+        
+        let textCount = input.textFieldString.map { text in
+            text.count
+        }
+        
+        return Output(selectedButton: selectedItem,
+                      textCount: textCount)
+    }
 }
