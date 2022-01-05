@@ -34,6 +34,7 @@ extension FirstViewModel {
             ButtonModel(buttonNumber: buttonNumber,
                         buttonInfo: buttonNumber.description)
         }
+        .share()
         
         let textCount = input.textFieldString.map { text in
             text.count

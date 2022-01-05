@@ -27,6 +27,7 @@ final class FirstViewController: BaseViewController {
             state: .normal,
             radius: 0
         )
+        $0.setTitleColor(.red, for: .selected)
     }
     
     private let secondButton = UIButton().then {
@@ -38,6 +39,7 @@ final class FirstViewController: BaseViewController {
             state: .normal,
             radius: 0
         )
+        $0.setTitleColor(.red, for: .selected)
     }
     
     private let thirdButton = UIButton().then {
@@ -49,6 +51,7 @@ final class FirstViewController: BaseViewController {
             state: .normal,
             radius: 0
         )
+        $0.setTitleColor(.red, for: .selected)
     }
     
     private let buttonLabel = UILabel().then {
@@ -142,6 +145,21 @@ extension FirstViewController {
         )
         // TODO
         let output = viewModel.transform(input: input)
+        
+        output.selectedButton
+            .map{ $0.buttonNumber == 1 }
+            .bind(to: firstButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        output.selectedButton
+            .map{ $0.buttonNumber == 2 }
+            .bind(to: secondButton.rx.isSelected)
+            .disposed(by: disposeBag)
+        
+        output.selectedButton
+            .map{ $0.buttonNumber == 3 }
+            .bind(to: thirdButton.rx.isSelected)
+            .disposed(by: disposeBag)
         
         output.selectedButton
             .map { $0.buttonInfo }
