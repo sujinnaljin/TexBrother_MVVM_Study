@@ -79,30 +79,6 @@ final class FirstViewController: BaseViewController {
         super.viewDidLoad()
         layout()
         bind()
-
-        firstButton.rx.tap
-            .bind { [weak self] in
-                self?.buttonClickSubject.onNext(1)
-            }
-            .disposed(by: disposeBag)
-        
-        secondButton.rx.tap
-            .bind { [weak self] in
-                self?.buttonClickSubject.onNext(2)
-            }
-            .disposed(by: disposeBag)
-        
-        thirdButton.rx.tap
-            .bind { [weak self] in
-                self?.buttonClickSubject.onNext(3)
-            }
-            .disposed(by: disposeBag)
-        
-        countTextField.rx.text
-            .bind { [weak self] text in
-                self?.textSubject.onNext(text ?? "")
-            }
-            .disposed(by: disposeBag)
     }
 }
 
@@ -167,14 +143,34 @@ extension FirstViewController {
         // TODO
         let output = viewModel.transform(input: input)
         
-        output.selectedButton.subscribe(onNext: { buttonModel in
-            self.buttonLabel.text = buttonModel.buttonInfo
-        })
-        .disposed(by: disposeBag)
+        output.selectedButton
+            .map { $0.buttonInfo }
+            .bind(to: buttonLabel.rx.text)
+            .disposed(by: disposeBag)
         
-        output.textCount.subscribe(onNext: { textCount in
-            self.countLabel.text = textCount.description
-        })
-        .disposed(by: disposeBag)
+        output.textCount
+            .map { $0.description }
+            .bind(to: countLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        firstButton.rx.tap
+            .map { 1 }
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+        
+        secondButton.rx.tap
+            .map { 2 }
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+        
+        thirdButton.rx.tap
+            .map { 3 }
+            .bind(to: buttonClickSubject)
+            .disposed(by: disposeBag)
+       
+        countTextField.rx.text
+            .compactMap { $0 }
+            .bind(to: textSubject)
+            .disposed(by: disposeBag)
     }
 }
